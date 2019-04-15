@@ -50,7 +50,7 @@ async function getQRs(list){
       return nightmare
         .goto(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`)
         .then(()=>{
-          download(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`, `${item}-QR.png`, ()=>{
+          download(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`, `./QRCodes/${item}QR.png`, ()=>{
             console.log(`${item} downloaded`)
           })
         })
@@ -58,9 +58,11 @@ async function getQRs(list){
           console.log(err)
         })
     })
-  }, Promise.resolve([])).then(results=>{
-    console.dir(results)
-  })
+  },
+  Promise.resolve([]))
+    .then(results=>{
+      console.dir(results)
+    })
 }
 
 /*function downloadItem(item){
