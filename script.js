@@ -1,4 +1,4 @@
-// QR Code API - http://goqr.me/api/ 
+// QR Code API - http://goqr.me/api/
 const Nightmare = require('Nightmare')
 const nightmare = Nightmare({show:true})
 const request = require('request')
@@ -14,6 +14,8 @@ async function downloadQRs(){
     for(const item of list){
       await getQR(item)
     }
+    console.log('Done!')
+    process.exit(1)
   }catch(err){
     console.error(err)
   }
