@@ -29,11 +29,9 @@ downloadQRs()
 async function downloadQRs(){
   try{
     const list = await getList()
-    // getQRs(list)
     for(const item of list){
       await getQR(item)
     }
-
   }catch(err){
     console.error(err)
   }
@@ -53,27 +51,6 @@ function getQR(item){
       })
     })
 }
-
-/*function getQRs(list){
-  list.reduce((accumulator, item)=>{
-    return accumulator.then(results=>{
-      return nightmare
-        .goto(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`)
-        .then(()=>{
-          download(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`, `./QRCodes/${item}QR.png`, ()=>{
-            console.log(`${item} downloaded`)
-          })
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-    })
-  },
-  Promise.resolve([]))
-    .then(results=>{
-      console.dir(results)
-    })
-}*/
 
 function download(uri, filename, callback) {
   request.head(uri, function () {
