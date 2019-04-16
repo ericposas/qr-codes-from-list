@@ -2,9 +2,11 @@
 const Nightmare = require('Nightmare')
 const nightmare = Nightmare({show:true})
 const request = require('request')
-const fs = require('fs')
+const Promise = require('bluebird')
+const fs = Promise.promisifyAll(require('fs'))
 const list = fs.createReadStream('list.txt')
 const _ = require('underscore')
+const json = {items:[]}
 
 downloadQRs()
 
@@ -12,10 +14,14 @@ async function downloadQRs(){
   try{
     const list = await getList()
     for(const item of list){
-      await getQR(item)
+      const file = await getQR(item)
+      json.items.push(file)
     }
-    console.log('Done!')
-    process.exit(1)
+    const outputJSON = fs.createWriteStream('images.json')
+    outputJSON.write(JSON.stringify(json), (err)=>{
+      console.log('Done!')
+      process.exit(1)
+    })
   }catch(err){
     console.error(err)
   }
@@ -45,8 +51,9 @@ function getQR(item){
     nightmare
       .goto(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`)
       .then(()=>{
+        const filename = `${item}QR.png`
         download(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`, `./QRCodes/${item}QR.png`, ()=>{
-          resolve(`${item} downloaded`)
+          resolve(filename)
         })
       })
       .catch(err=>{
