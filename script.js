@@ -24,15 +24,6 @@ function getList(){
   })
 }
 
-
-/*let param1
-if(!process.argv[2]){
-  console.log('Please provide a QR string name parameter')
-  process.exit(0)
-}else{
-  param1 = process.argv[2]
-}*/
-
 downloadQRs()
 
 async function downloadQRs(){
@@ -44,7 +35,7 @@ async function downloadQRs(){
   }
 }
 
-async function getQRs(list){
+function getQRs(list){
   list.reduce((accumulator, item)=>{
     return accumulator.then(results=>{
       return nightmare
@@ -64,19 +55,6 @@ async function getQRs(list){
       console.dir(results)
     })
 }
-
-/*function downloadItem(item){
-  nightmare
-    .goto(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`)
-    .then(()=>{
-      download(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item}`, `${item}-QR.png`, ()=>{
-        console.log('done')
-      })
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-}*/
 
 function download(uri, filename, callback) {
   request.head(uri, function () {
