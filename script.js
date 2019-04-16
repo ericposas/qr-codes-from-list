@@ -1,3 +1,4 @@
+// QR Code API - http://goqr.me/api/ 
 const Nightmare = require('Nightmare')
 const nightmare = Nightmare({show:true})
 const request = require('request')
@@ -5,9 +6,22 @@ const fs = require('fs')
 const list = fs.createReadStream('list.txt')
 const _ = require('underscore')
 
-let chunks = []
+downloadQRs()
+
+async function downloadQRs(){
+  try{
+    const list = await getList()
+    for(const item of list){
+      await getQR(item)
+    }
+  }catch(err){
+    console.error(err)
+  }
+}
+
 function getList(){
   return new Promise((resolve, reject)=>{
+    let chunks = []
     list.on('readable', ()=>{
       chunks.push(list.read())
     })
@@ -22,19 +36,6 @@ function getList(){
       reject()
     })
   })
-}
-
-downloadQRs()
-
-async function downloadQRs(){
-  try{
-    const list = await getList()
-    for(const item of list){
-      await getQR(item)
-    }
-  }catch(err){
-    console.error(err)
-  }
 }
 
 function getQR(item){

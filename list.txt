@@ -1,4 +1,4 @@
-Falcon
+Captain Falcon
 Falcon Punch
 Goose
 Raven Wing
@@ -7,3 +7,5 @@ Red Falcon
 Red Wind
 Blue Falcon
 White Stallion
+Jin Saotome
+Captain Commando
