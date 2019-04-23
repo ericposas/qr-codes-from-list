@@ -41,7 +41,6 @@ function onProgHandler(loader, resource){
 
 function start(images){
   console.log('started')
-  let downloadData = []
   images.forEach(path => {
     const container = new PIXI.Container()
     const card = new PIXI.Graphics()
@@ -62,7 +61,7 @@ function start(images){
     text.x = card.x + img.width/8
     text.y = card.y + img.height/8
     container.addChild(card, img, text)
-    stage.addChild(container)
+    // stage.addChild(container)
     downloadSpriteToPNG(renderer, container, `${handle}.png`)
   })
 }
