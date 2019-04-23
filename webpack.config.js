@@ -25,7 +25,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg)$/,
-        use: ['file-loader?name=./[name].[ext]']
+        use: ['file-loader?name=./images/[name].[ext]']
       },
       {
         test: /\.pug$/,

@@ -4,15 +4,11 @@ import {
   pixiSetup,
   pixiResize
 } from './modules/pixiSetup'
-import '../QRCodes/Captain FalconQR.png'
 import axios from 'axios'
 
-/*function importAll(r) {
-  console.log(r)
+const importAll = r=>{
   return r.keys().map(r)
 }
-const images = importAll(require.context('../QRCodes', false, /\.(png|jpe?g|svg)$/));
-console.log(images)*/
 
 const app = new PIXI.Application()
 const stage = app.stage
@@ -26,41 +22,43 @@ const cardDPI = 300
 
 // some set up code
       //.add(images)
-
-loader.add('./GooseQR.png')
-      .add('./Captain FalconQR.png')
-      .on('progress', onLoaderProgress)
-      .load(pixiStart)
-
 const onLoaderProgress = (loader, resource)=>{
   console.log(`loading: ${loader.progress}%, ${resource.url}`)
 }
 
-const pixiStart = ()=>{
+const pixiStart = qrs=>{
   console.log('started')
   pixiSetup(app)
   pixiResize(app)
-  generateCards()
+  generateCards(qrs)
 }
 
-const generateCards = ()=>{
+const generateCards = qrCodes=>{
   console.log('in generateCards')
-  console.log(PIXI.utils.TextureCache['./Captain FalconQR.png'])
-  const img = new PIXI.Sprite( PIXI.utils.TextureCache['./Captain FalconQR.png'] )
-  stage.addChild(img)
-  // console.log(img)
-
-  /*qrCodes.forEach(code => {
-    const cardShape = new PIXI.Graphics()
+  console.log(qrCodes)
+  qrCodes.forEach(code => {
+    code = JSON.stringify(code)
+    /*const cardShape = new PIXI.Graphics()
     cardShape.beginFill(0x6495ed)
     cardShape.drawRect(0, 0, cardSize.w/2, cardSize.h/2)
     cardShape.x = app.renderer.width/2 - cardShape.width/2
     cardShape.y = app.renderer.height/2 - cardShape.height/2
-    stage.addChild(cardShape)
-    const image = new PIXI.Sprite( PIXI.utils.TextureCache[code] )
-    image.x = app.renderer.width/2 - image.width/2
-    image.y = app.renderer.height/2 - image.height/2
-    stage.addChild(image)
-    console.log(code);
-  })*/
+    stage.addChild(cardShape)*/
+    console.log(code)
+    const img = new PIXI.Sprite( PIXI.utils.TextureCache[code] )
+    stage.addChild(img)
+  })
 }
+
+;(async ()=>{
+  try {
+    const images = await importAll(require.context('../QRCodes', false, /\.(png|jpe?g|svg)$/));
+    console.log('images imported')
+    await loader.add(images)
+                .on('progress', onLoaderProgress)
+                .load()
+    pixiStart(images)
+  }catch(err){
+    console.log(err)
+  }
+})()
