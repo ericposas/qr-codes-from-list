@@ -4,7 +4,7 @@ const nightmare = Nightmare({show:true})
 const request = require('request')
 const Promise = require('bluebird')
 const fs = Promise.promisifyAll(require('fs'))
-const list = fs.createReadStream('list.txt')
+const list = fs.createReadStream('qrList.txt')
 const _ = require('underscore')
 const json = {items:[]}
 
@@ -17,7 +17,7 @@ async function downloadQRs(){
       const file = await getQR(item)
       json.items.push(file)
     }
-    const outputJSON = fs.createWriteStream('images.json')
+    const outputJSON = fs.createWriteStream('qrCodes.json')
     outputJSON.write(JSON.stringify(json), (err)=>{
       console.log('Done!')
       process.exit(1)
