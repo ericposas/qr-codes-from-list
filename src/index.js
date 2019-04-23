@@ -4,6 +4,8 @@ import {
   pixiSetup,
   pixiResize
 } from './modules/pixiSetup'
+// import '../QRCodes/Captain FalconQR.png'
+// import '../mario.jpg'
 import axios from 'axios'
 
 const importAll = r=>{
@@ -20,45 +22,29 @@ const resources = PIXI.loader.resources
 const cardSize = { w:1050, h:600 }
 const cardDPI = 300
 
-// some set up code
-      //.add(images)
-const onLoaderProgress = (loader, resource)=>{
-  console.log(`loading: ${loader.progress}%, ${resource.url}`)
-}
-
-const pixiStart = qrs=>{
-  console.log('started')
-  pixiSetup(app)
-  pixiResize(app)
-  generateCards(qrs)
-}
-
-const generateCards = qrCodes=>{
-  console.log('in generateCards')
-  console.log(qrCodes)
-  qrCodes.forEach(code => {
-    code = JSON.stringify(code)
-    /*const cardShape = new PIXI.Graphics()
-    cardShape.beginFill(0x6495ed)
-    cardShape.drawRect(0, 0, cardSize.w/2, cardSize.h/2)
-    cardShape.x = app.renderer.width/2 - cardShape.width/2
-    cardShape.y = app.renderer.height/2 - cardShape.height/2
-    stage.addChild(cardShape)*/
-    console.log(code)
-    const img = new PIXI.Sprite( PIXI.utils.TextureCache[code] )
-    stage.addChild(img)
-  })
-}
-
-;(async ()=>{
+pixiSetup(app)
+pixiResize(app)
+;(async () => {
   try {
     const images = await importAll(require.context('../QRCodes', false, /\.(png|jpe?g|svg)$/));
-    console.log('images imported')
-    await loader.add(images)
-                .on('progress', onLoaderProgress)
-                .load()
-    pixiStart(images)
+    loader.add(images)
+          .on('progress', onProgHandler)
+          .load(()=>{ start(images) })
   }catch(err){
     console.log(err)
   }
 })()
+
+function onProgHandler(loader, resource){
+  console.log(`loading ${resource.url}`)
+}
+
+function start(images){
+  console.log('started')
+  /*const img = new PIXI.Sprite( PIXI.utils.TextureCache[ images[0] ] )
+  stage.addChild(img)*/
+  images.forEach(path => {
+    let img = new PIXI.Sprite( PIXI.utils.TextureCache[ path ] )
+    stage.addChild(img)
+  })
+}
