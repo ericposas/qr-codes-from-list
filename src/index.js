@@ -4,8 +4,6 @@ import {
   pixiSetup,
   pixiResize
 } from './modules/pixiSetup'
-// import '../QRCodes/Captain FalconQR.png'
-// import '../mario.jpg'
 import axios from 'axios'
 
 const importAll = r=>{
@@ -26,6 +24,7 @@ pixiSetup(app)
 pixiResize(app)
 ;(async () => {
   try {
+    // imports all images located in ../QRCodes/ directory
     const images = await importAll(require.context('../QRCodes', false, /\.(png|jpe?g|svg)$/));
     loader.add(images)
           .on('progress', onProgHandler)
@@ -62,7 +61,7 @@ function start(images){
     text.x = card.x + img.width/8
     text.y = card.y + img.height/8
     container.addChild(card, img, text)
-    // stage.addChild(container)
+    stage.addChild(container)
     downloadSpriteToPNG(renderer, container, `${handle}.png`, delay)
     delay += 250
   })
