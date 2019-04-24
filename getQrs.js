@@ -4,15 +4,20 @@ const nightmare = Nightmare({show:true})
 const request = require('request')
 const Promise = require('bluebird')
 const fs = Promise.promisifyAll(require('fs'))
-const list = fs.createReadStream('qrList.txt')
+// const list = fs.createReadStream('qrList.txt')
 const _ = require('underscore')
+const uuid = require('uuid')
 const json = {items:[]}
 
 downloadQRs()
 
 async function downloadQRs(){
   try{
-    const list = await getList()
+    // const list = await getList()
+    const list = []
+    for(let i = 0; i < 5; i++){
+      list.push(uuid())
+    }
     for(const item of list){
       const file = await getQR(item)
       json.items.push(file)
@@ -27,7 +32,7 @@ async function downloadQRs(){
   }
 }
 
-function getList(){
+/*function getList(){
   return new Promise((resolve, reject)=>{
     let chunks = []
     list.on('readable', ()=>{
@@ -44,7 +49,7 @@ function getList(){
       reject()
     })
   })
-}
+}*/
 
 function getQR(item){
   return new Promise((resolve, reject)=>{
