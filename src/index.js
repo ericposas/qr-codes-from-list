@@ -41,6 +41,7 @@ function onProgHandler(loader, resource){
 
 function start(images){
   console.log('started')
+  let delay = 0
   images.forEach(path => {
     const container = new PIXI.Container()
     const card = new PIXI.Graphics()
@@ -62,17 +63,20 @@ function start(images){
     text.y = card.y + img.height/8
     container.addChild(card, img, text)
     // stage.addChild(container)
-    downloadSpriteToPNG(renderer, container, `${handle}.png`)
+    downloadSpriteToPNG(renderer, container, `${handle}.png`, delay)
+    delay += 250
   })
 }
 
-function downloadSpriteToPNG(renderer, sprite, fileName) {
-  renderer.extract.canvas(sprite).toBlob( b => {
-    const a = document.createElement('a');
-    document.body.append(a);
-    a.download = fileName;
-    a.href = URL.createObjectURL(b);
-    a.click();
-    a.remove();
-  }, 'image/png')
+function downloadSpriteToPNG(renderer, sprite, fileName, delay) {
+  setTimeout(() => {
+    renderer.extract.canvas(sprite).toBlob( b => {
+      const a = document.createElement('a');
+      document.body.append(a);
+      a.download = fileName;
+      a.href = URL.createObjectURL(b);
+      a.click();
+      a.remove();
+    }, 'image/png')
+  }, delay)
 }
